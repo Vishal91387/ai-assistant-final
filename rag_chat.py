@@ -6,7 +6,6 @@ from config import CHROMA_PATH, chroma_settings
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 vectordb = Chroma(
-    persist_directory=CHROMA_PATH,
     embedding_function=embeddings,
     collection_name="my_rag_docs",
     client_settings=chroma_settings
