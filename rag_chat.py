@@ -3,13 +3,18 @@ from langchain_ollama.embeddings import OllamaEmbeddings
 from langchain_community.llms import Ollama
 from langchain.chains import RetrievalQAWithSourcesChain
 from config import CHROMA_PATH, chroma_settings
+from chromadb.config import Settings
+
+chroma_settings = Settings(
+    chroma_db_impl="duckdb+parquet",
+    persist_directory=":memory:"
+)
 
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
 vectordb = Chroma(
     embedding_function=embeddings,
     collection_name="my_rag_docs",
-    client_settings=chroma_settings,
-    persist_directory=None  # explicitly disable persistence
+    client_settings=chroma_settings
 )
 
 retriever = vectordb.as_retriever(search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.3, "k": 5})
