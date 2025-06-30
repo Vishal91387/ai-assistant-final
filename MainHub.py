@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-import pytesseract
 from deep_translator import GoogleTranslator
 import os
 import requests
@@ -26,14 +25,13 @@ st.markdown("""
 This is your unified interface to access all your local AI tools. Use the tabs below to:
 
 - **📄 RAGdoc** — Ask questions from your uploaded documents or from live web sources
-- **📷 OCR** — Extract and translate text from images in multiple languages
 - **📈 Real-Time AI Watch** — Track news and stock prices using live APIs
 
 Select a tab to get started 👇
 """)
 st.markdown("---")
 
-tabs = st.tabs(["📄 RAGdoc", "📷 OCR", "📈 Real-Time AI Watch"])
+tabs = st.tabs(["📄 RAGdoc", "📈 Real-Time AI Watch"])
 
 # ---------------------
 # 📄 Tab 1: RAGdoc
@@ -83,48 +81,7 @@ with tabs[0]:
             st.markdown("### 🌐 Web Response")
             st.write(response)
 # ---------------------
-# 📷 Tab 2: OCR
-# ---------------------
-with tabs[1]:
-    st.header("📷 OCR Image/Text Extraction")
-
-    tessdata_dir = "./tessdata"
-    lang = st.selectbox("Select OCR Language", ["eng", "spa", "fra", "deu", "ara"])
-    tesseract_config = f"--tessdata-dir {tessdata_dir} -l {lang}"
-
-    uploaded_file = st.file_uploader("Upload an image (PNG, JPG, JPEG)", type=["png", "jpg", "jpeg"])
-    
-    if uploaded_file:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
-
-        extracted_text = pytesseract.image_to_string(image, config=tesseract_config)
-        translated_text = GoogleTranslator(source='auto', target='en').translate(extracted_text)
-
-        st.subheader("📝 Extracted Text")
-        st.text_area("Original Text", extracted_text, height=200)
-        
-                # --- Download buttons ---
-        st.download_button(
-            "⬇️ Download Original Text",
-            data=extracted_text,
-            file_name="ocr_original.txt",
-            mime="text/plain"
-        )
-
-        st.subheader("🌍 Translated to English")
-        st.text_area("Translated Text", translated_text, height=200)
-
-
-        st.download_button(
-            "⬇️ Download Translated Text",
-            data=translated_text,
-            file_name="ocr_translated.txt",
-            mime="text/plain"
-        )
-
-# ---------------------
-# 📈 Tab 3: Real-Time AI Watch
+# 📈 Tab 2: Real-Time AI Watch
 # ---------------------
 with tabs[2]:
     st.header("📈 Real-Time News and Stock Tracking")
