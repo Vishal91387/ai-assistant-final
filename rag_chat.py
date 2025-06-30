@@ -8,7 +8,8 @@ embeddings = OllamaEmbeddings(model="nomic-embed-text")
 vectordb = Chroma(
     embedding_function=embeddings,
     collection_name="my_rag_docs",
-    client_settings=chroma_settings
+    client_settings=chroma_settings,
+    persist_directory=None  # explicitly disable persistence
 )
 
 retriever = vectordb.as_retriever(search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.3, "k": 5})
